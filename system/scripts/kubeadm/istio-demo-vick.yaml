@@ -18,7 +18,7 @@ metadata:
     heritage: Tiller
     istio: mixer
 data:
-  validatingwebhookconfiguration.yaml: |-    
+  validatingwebhookconfiguration.yaml: |-
     apiVersion: admissionregistration.k8s.io/v1beta1
     kind: ValidatingWebhookConfiguration
     metadata:
@@ -144,7 +144,7 @@ metadata:
     heritage: Tiller
     istio: grafana
 data:
-  custom-resources.yaml: |-    
+  custom-resources.yaml: |-
     apiVersion: authentication.istio.io/v1alpha1
     kind: Policy
     metadata:
@@ -155,18 +155,18 @@ data:
       - name: grafana
         ports:
         - number: 3000
-  run.sh: |-    
+  run.sh: |-
     #!/bin/sh
-    
+
     set -x
-    
+
     if [ "$#" -ne "1" ]; then
         echo "first argument should be path to custom resource yaml"
         exit 1
     fi
-    
+
     pathToResourceYAML=${1}
-    
+
     /kubectl get validatingwebhookconfiguration istio-galley 2>/dev/null
     if [ "$?" -eq 0 ]; then
         echo "istio-galley validatingwebhookconfiguration found - waiting for istio-galley deployment to be ready"
@@ -186,7 +186,7 @@ data:
     fi
     sleep 5
     /kubectl apply -f ${pathToResourceYAML}
-    
+
 
 ---
 # Source: istio/charts/mixer/templates/configmap.yaml
@@ -460,18 +460,18 @@ metadata:
     istio: security
 data:
   custom-resources.yaml: |-
-  run.sh: |-    
+  run.sh: |-
     #!/bin/sh
-    
+
     set -x
-    
+
     if [ "$#" -ne "1" ]; then
         echo "first argument should be path to custom resource yaml"
         exit 1
     fi
-    
+
     pathToResourceYAML=${1}
-    
+
     /kubectl get validatingwebhookconfiguration istio-galley 2>/dev/null
     if [ "$?" -eq 0 ]; then
         echo "istio-galley validatingwebhookconfiguration found - waiting for istio-galley deployment to be ready"
@@ -491,7 +491,7 @@ data:
     fi
     sleep 5
     /kubectl apply -f ${pathToResourceYAML}
-    
+
 
 ---
 # Source: istio/templates/configmap.yaml
@@ -520,12 +520,12 @@ data:
     #
     # Deprecated: mixer is using EDS
     mixerCheckServer: istio-policy.istio-system.svc.cluster.local:9091
-    mixerReportServer: wso2sp-worker.vick-system.svc.cluster.local:9091
+    mixerReportServer: wso2sp-worker.cellery-system.svc.cluster.local:9091
 
     # Unix Domain Socket through which envoy communicates with NodeAgent SDS to get
-    # key/cert for mTLS. Use secret-mount files instead of SDS if set to empty. 
+    # key/cert for mTLS. Use secret-mount files instead of SDS if set to empty.
     sdsUdsPath: ""
-    
+
     # How frequently should Envoy fetch key/cert from NodeAgent.
     sdsRefreshDelay: 15s
 
@@ -572,7 +572,7 @@ data:
       concurrency: 0
       #
       # Zipkin trace collector
-      zipkinAddress: wso2sp-worker.vick-system:9411
+      zipkinAddress: wso2sp-worker.cellery-system:9411
       #
       # Statsd metrics collector converts statsd metrics into Prometheus metrics.
       statsdUdpAddress: istio-statsd-prom-bridge.istio-system:9125
@@ -640,7 +640,7 @@ data:
             add:
             - NET_ADMIN
           restartPolicy: Always
-      
+
       containers:
       - name: istio-proxy
         image: [[ if (isset .ObjectMeta.Annotations "sidecar.istio.io/proxyImage") -]]
@@ -722,7 +722,7 @@ data:
         [[ else -]]
           requests:
             cpu: 10m
-          
+
         [[ end -]]
         volumeMounts:
         - mountPath: /etc/istio/proxy
@@ -1027,7 +1027,7 @@ metadata:
 
 ---
 # Source: istio/templates/crds.yaml
-# 
+#
 # these CRDs only make sense when pilot is enabled
 #
 apiVersion: apiextensions.k8s.io/v1beta1
@@ -1112,7 +1112,7 @@ spec:
     - istio-io
     - networking-istio-io
   scope: Namespaced
-  version: v1alpha3 
+  version: v1alpha3
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
@@ -2104,7 +2104,7 @@ spec:
   version: v1alpha2
 ---
 #
-# 
+#
 ---
 # Source: istio/charts/galley/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -2673,7 +2673,7 @@ spec:
         resources:
           requests:
             cpu: 10m
-          
+
         volumeMounts:
         - name: config-volume
           mountPath: /etc/statsd
@@ -2856,7 +2856,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
+
       volumes:
       - name: certs
         secret:
@@ -2864,7 +2864,7 @@ spec:
       - name: config
         configMap:
           name: istio-galley-configuration
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -2947,7 +2947,7 @@ spec:
           - --serviceCluster
           - istio-egressgateway
           - --zipkinAddress
-          - wso2sp-worker.vick-system:9411
+          - wso2sp-worker.cellery-system:9411
           - --statsdUdpAddress
           - istio-statsd-prom-bridge:9125
           - --proxyAdminPort
@@ -2959,7 +2959,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
+
           env:
           - name: POD_NAME
             valueFrom:
@@ -3003,7 +3003,7 @@ spec:
         secret:
           secretName: "istio-egressgateway-ca-certs"
           optional: true
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3089,7 +3089,7 @@ spec:
           - --serviceCluster
           - istio-ingressgateway
           - --zipkinAddress
-          - wso2sp-worker.vick-system:9411
+          - wso2sp-worker.cellery-system:9411
           - --statsdUdpAddress
           - istio-statsd-prom-bridge:9125
           - --proxyAdminPort
@@ -3101,7 +3101,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
+
           env:
           - name: POD_NAME
             valueFrom:
@@ -3145,7 +3145,7 @@ spec:
         secret:
           secretName: "istio-ingressgateway-ca-certs"
           optional: true
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3224,11 +3224,11 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
+
           volumeMounts:
           - name: data
             mountPath: /data/grafana
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3297,7 +3297,7 @@ spec:
           optional: true
       - name: uds-socket
         emptyDir: {}
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3342,11 +3342,11 @@ spec:
           - unix:///sock/mixer.socket
           - --configStoreURL=k8s://
           - --configDefaultNamespace=istio-system
-          - --trace_zipkin_url=http://wso2sp-worker.vick-system:9411/api/v1/spans
+          - --trace_zipkin_url=http://wso2sp-worker.cellery-system:9411/api/v1/spans
         resources:
           requests:
             cpu: 10m
-          
+
         volumeMounts:
         - name: uds-socket
           mountPath: /sock
@@ -3389,7 +3389,7 @@ spec:
         resources:
           requests:
             cpu: 10m
-          
+
         volumeMounts:
         - name: istio-certs
           mountPath: /etc/certs
@@ -3439,11 +3439,11 @@ spec:
           - unix:///sock/mixer.socket
           - --configStoreURL=k8s://
           - --configDefaultNamespace=istio-system
-          - --trace_zipkin_url=http://wso2sp-worker.vick-system:9411/api/v1/spans
+          - --trace_zipkin_url=http://wso2sp-worker.cellery-system:9411/api/v1/spans
         resources:
           requests:
             cpu: 10m
-          
+
         volumeMounts:
         - name: uds-socket
           mountPath: /sock
@@ -3486,7 +3486,7 @@ spec:
         resources:
           requests:
             cpu: 10m
-          
+
         volumeMounts:
         - name: istio-certs
           mountPath: /etc/certs
@@ -3494,7 +3494,7 @@ spec:
         - name: uds-socket
           mountPath: /sock
 
---- 
+---
 
 ---
 # Source: istio/charts/pilot/templates/deployment.yaml
@@ -3563,7 +3563,7 @@ spec:
             requests:
               cpu: 500m
               memory: 2048Mi
-            
+
           volumeMounts:
           - name: config-volume
             mountPath: /etc/istio/config
@@ -3605,7 +3605,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
+
           volumeMounts:
           - name: istio-certs
             mountPath: /etc/certs
@@ -3617,8 +3617,8 @@ spec:
       - name: istio-certs
         secret:
           secretName: istio.istio-pilot-service-account
-          optional: true   
-      affinity:      
+          optional: true
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3700,7 +3700,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
+
           volumeMounts:
           - name: config-volume
             mountPath: /etc/prometheus
@@ -3708,7 +3708,7 @@ spec:
       - name: config-volume
         configMap:
           name: prometheus
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3781,8 +3781,8 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
-      affinity:      
+
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3857,8 +3857,8 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
-      affinity:      
+
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -3959,7 +3959,7 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
+
       volumes:
       - name: config-volume
         configMap:
@@ -3973,7 +3973,7 @@ spec:
           items:
           - key: config
             path: config
-      affinity:      
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -4063,8 +4063,8 @@ spec:
           resources:
             requests:
               cpu: 10m
-            
-      affinity:      
+
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:

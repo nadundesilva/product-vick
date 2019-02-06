@@ -228,13 +228,13 @@ sudo mkdir -p /mnt/mysql
 #Change the folder ownership to mysql server user.
 sudo chown 999:999 /mnt/mysql
 
-kubectl create configmap mysql-dbscripts --from-file=${download_location}/mysql/dbscripts/ -n vick-system
-kubectl apply -f ${download_location}/mysql-persistent-volumes-local.yaml -n vick-system
-kubectl apply -f ${download_location}/mysql-persistent-volume-claim.yaml -n vick-system
-kubectl apply -f ${download_location}/mysql-deployment.yaml -n vick-system
+kubectl create configmap mysql-dbscripts --from-file=${download_location}/mysql/dbscripts/ -n cellery-system
+kubectl apply -f ${download_location}/mysql-persistent-volumes-local.yaml -n cellery-system
+kubectl apply -f ${download_location}/mysql-persistent-volume-claim.yaml -n cellery-system
+kubectl apply -f ${download_location}/mysql-deployment.yaml -n cellery-system
 #Wait till the mysql deployment availability
-kubectl wait deployment/wso2apim-with-analytics-mysql-deployment --for condition=available --timeout=6000s -n vick-system
-kubectl apply -f ${download_location}/mysql-service.yaml -n vick-system
+kubectl wait deployment/wso2apim-with-analytics-mysql-deployment --for condition=available --timeout=6000s -n cellery-system
+kubectl apply -f ${download_location}/mysql-service.yaml -n cellery-system
 }
 
 function deploy_mysql_server_gcp () {
@@ -319,29 +319,29 @@ if [ $iaas == "kubeadm" ] || [ $iaas == "k8s" ]; then
     sudo mkdir -p /mnt/apim_repository_deployment_server
     sudo chown 802:802 /mnt/apim_repository_deployment_server
     #Create apim local volumes and volume claims
-    kubectl apply -f ${download_location}/vick-apim-persistent-volumes-local.yaml -n vick-system
-    kubectl apply -f ${download_location}/vick-apim-persistent-volume-claim-local.yaml -n vick-system
+    kubectl apply -f ${download_location}/vick-apim-persistent-volumes-local.yaml -n cellery-system
+    kubectl apply -f ${download_location}/vick-apim-persistent-volume-claim-local.yaml -n cellery-system
 elif [ $iaas == "GCP" ]; then
     #Create apim NFS volumes and volume claims
-    kubectl apply -f ${download_location}/vick-apim-artifacts-persistent-volumes.yaml -n vick-system
-    kubectl apply -f ${download_location}/vick-apim-artifacts-persistent-volume-claim.yaml -n vick-system
+    kubectl apply -f ${download_location}/vick-apim-artifacts-persistent-volumes.yaml -n cellery-system
+    kubectl apply -f ${download_location}/vick-apim-artifacts-persistent-volume-claim.yaml -n cellery-system
 fi
 
 #Create the gw config maps
-kubectl create configmap gw-conf --from-file=${download_location}/apim-configs/gw -n vick-system
-kubectl create configmap gw-conf-datasources --from-file=${download_location}/apim-configs/gw/datasources/ -n vick-system
+kubectl create configmap gw-conf --from-file=${download_location}/apim-configs/gw -n cellery-system
+kubectl create configmap gw-conf-datasources --from-file=${download_location}/apim-configs/gw/datasources/ -n cellery-system
 #Create KM config maps
-kubectl create configmap conf-identity --from-file=${download_location}/apim-configs/gw/identity -n vick-system
-kubectl create configmap apim-template --from-file=${download_location}/apim-configs/gw/resources/api_templates -n vick-system
-kubectl create configmap apim-tomcat --from-file=${download_location}/apim-configs/gw/tomcat -n vick-system
-kubectl create configmap apim-security --from-file=${download_location}/apim-configs/gw/security -n vick-system
+kubectl create configmap conf-identity --from-file=${download_location}/apim-configs/gw/identity -n cellery-system
+kubectl create configmap apim-template --from-file=${download_location}/apim-configs/gw/resources/api_templates -n cellery-system
+kubectl create configmap apim-tomcat --from-file=${download_location}/apim-configs/gw/tomcat -n cellery-system
+kubectl create configmap apim-security --from-file=${download_location}/apim-configs/gw/security -n cellery-system
 
 #Create gateway deployment and the service
-kubectl apply -f ${download_location}/vick-apim-gw.yaml -n vick-system
+kubectl apply -f ${download_location}/vick-apim-gw.yaml -n cellery-system
  #Wait till the gateway deployment availability
-kubectl wait deployment/gateway --for condition=available --timeout=6000s -n vick-system
+kubectl wait deployment/gateway --for condition=available --timeout=6000s -n cellery-system
 #Create gateway ingress
-kubectl apply -f ${download_location}/vick-apim-gw-ingress.yaml -n vick-system
+kubectl apply -f ${download_location}/vick-apim-gw-ingress.yaml -n cellery-system
 }
 
 function deploy_global_pubstore () {
@@ -349,37 +349,37 @@ function deploy_global_pubstore () {
 
 #Create pubstore ingress
 #pubstore ingress is pointed to gatway service. In the future pubstore ingress will be pointed to pubstore service.
-kubectl apply -f ${download_location}/vick-apim-pub-store-ingress.yaml -n vick-system
+kubectl apply -f ${download_location}/vick-apim-pub-store-ingress.yaml -n cellery-system
 }
 
 function deploy_sp_dashboard_worker () {
 local download_location=$1
 
 #Create SP worker configmaps
-kubectl create configmap sp-worker-siddhi --from-file=${download_location}/sp-worker/siddhi -n vick-system
-kubectl create configmap sp-worker-conf --from-file=${download_location}/sp-worker/conf -n vick-system
-#kubectl create configmap sp-worker-bin --from-file=${download_location}/sp-worker/bin -n vick-system
+kubectl create configmap sp-worker-siddhi --from-file=${download_location}/sp-worker/siddhi -n cellery-system
+kubectl create configmap sp-worker-conf --from-file=${download_location}/sp-worker/conf -n cellery-system
+#kubectl create configmap sp-worker-bin --from-file=${download_location}/sp-worker/bin -n cellery-system
 #Create SP worker deployment
-kubectl apply -f ${download_location}/vick-sp-worker-deployment.yaml -n vick-system
-kubectl apply -f ${download_location}/vick-sp-worker-service.yaml -n vick-system
+kubectl apply -f ${download_location}/vick-sp-worker-deployment.yaml -n cellery-system
+kubectl apply -f ${download_location}/vick-sp-worker-service.yaml -n cellery-system
 #Create SP dashboard configmaps
-#kubectl create configmap sp-dashboard-conf --from-file=${download_location}/status-dashboard/conf -n vick-system
-#kubectl create configmap sp-worker-bin --from-file=sp-worker/bin -n vick-system
+#kubectl create configmap sp-dashboard-conf --from-file=${download_location}/status-dashboard/conf -n cellery-system
+#kubectl create configmap sp-worker-bin --from-file=sp-worker/bin -n cellery-system
 #Create observability portal deployment, service and ingress.
-kubectl create configmap observability-portal-config --from-file=${download_location}/node-server/config -n vick-system
-kubectl apply -f ${download_location}/vick-observability-portal.yaml -n vick-system
-kubectl apply -f ${download_location}/vick-sp-worker-ingress.yaml -n vick-system
+kubectl create configmap observability-portal-config --from-file=${download_location}/node-server/config -n cellery-system
+kubectl apply -f ${download_location}/vick-observability-portal.yaml -n cellery-system
+kubectl apply -f ${download_location}/vick-sp-worker-ingress.yaml -n cellery-system
 
 # Create K8s Metrics Config-maps
-kubectl create configmap k8s-metrics-prometheus-conf --from-file=${download_location}/k8s-metrics/prometheus/config -n vick-system
-kubectl create configmap k8s-metrics-grafana-conf --from-file=${download_location}/k8s-metrics/grafana/config -n vick-system
-kubectl create configmap k8s-metrics-grafana-datasources --from-file=${download_location}/k8s-metrics/grafana/datasources -n vick-system
-kubectl create configmap k8s-metrics-grafana-dashboards --from-file=${download_location}/k8s-metrics/grafana/dashboards -n vick-system
-kubectl create configmap k8s-metrics-grafana-dashboards-default --from-file=${download_location}/k8s-metrics/grafana/dashboards/default -n vick-system
+kubectl create configmap k8s-metrics-prometheus-conf --from-file=${download_location}/k8s-metrics/prometheus/config -n cellery-system
+kubectl create configmap k8s-metrics-grafana-conf --from-file=${download_location}/k8s-metrics/grafana/config -n cellery-system
+kubectl create configmap k8s-metrics-grafana-datasources --from-file=${download_location}/k8s-metrics/grafana/datasources -n cellery-system
+kubectl create configmap k8s-metrics-grafana-dashboards --from-file=${download_location}/k8s-metrics/grafana/dashboards -n cellery-system
+kubectl create configmap k8s-metrics-grafana-dashboards-default --from-file=${download_location}/k8s-metrics/grafana/dashboards/default -n cellery-system
 
 #Create K8s Metrics deployment, service and ingress.
-kubectl apply -f ${download_location}/k8s-metrics-prometheus.yaml -n vick-system
-kubectl apply -f ${download_location}/k8s-metrics-grafana.yaml -n vick-system
+kubectl apply -f ${download_location}/k8s-metrics-prometheus.yaml -n cellery-system
+kubectl apply -f ${download_location}/k8s-metrics-grafana.yaml -n cellery-system
 }
 
 function init_control_plane () {
@@ -395,7 +395,7 @@ if [ $iaas == "kubeadm" ]; then
     kubectl label nodes $HOST_NAME disk=local
     #Create credentials for docker.wso2.com
     #kubectl create secret docker-registry wso2creds --docker-server=docker.wso2.com --docker-username=$DOCKER_REG_USER \
-    # --docker-password=$DOCKER_REG_PASSWD --docker-email=$DOCKER_REG_USER_EMAIL -n vick-system
+    # --docker-password=$DOCKER_REG_PASSWD --docker-email=$DOCKER_REG_USER_EMAIL -n cellery-system
 fi
 }
 
@@ -471,7 +471,7 @@ fi
 if [[ -n ${IAAS/[ ]*\n/} ]]; then
     iaas=$IAAS
     download_path=${DOWNLOAD_PATH:-tmp-wso2}
-    git_base_url=${GIT_BASE_URL:-https://raw.githubusercontent.com/wso2/product-vick/master}
+    git_base_url=${GIT_BASE_URL:-https://raw.githubusercontent.com/nadundesilva/product-vick/observability-portal}
     istio_version=${ISTIO_VERSION:-1.0.2}
     if [ $iaas == "kubeadm" ]; then
         k8s_version=${K8S_VERSION:-1.11.3-00}
@@ -644,7 +644,7 @@ download_vick_artifacts $crd_base_url  $download_path "${crd_yaml[@]}"
 download_vick_artifacts $istio_base_url $download_path "${istio_yaml[@]}"
 
 #Init control plane
-echo "🔧 Creating vick-system namespace and the service account"
+echo "🔧 Creating cellery-system namespace and the service account"
 
 init_control_plane $download_path $iaas
 

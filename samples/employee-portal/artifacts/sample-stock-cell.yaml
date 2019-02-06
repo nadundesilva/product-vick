@@ -1,4 +1,4 @@
-apiVersion: vick.wso2.com/v1alpha1
+apiVersion: mesh.cellery.io/v1alpha1
 kind: Cell
 metadata:
   name: stock-options
@@ -18,7 +18,7 @@ spec:
     spec:
       replicas: 1
       container:
-        image: docker.io/wso2vick/sampleapp-stock
+        image: docker.io/celleryio/sampleapp-stock
         ports:
         - containerPort: 8080
       servicePort: 80

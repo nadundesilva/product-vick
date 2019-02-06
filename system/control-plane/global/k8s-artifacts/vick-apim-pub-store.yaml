@@ -5,7 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pub-store
-  namespace: vick-system
+  namespace: cellery-system
 spec:
   selector:
     matchLabels:
@@ -113,7 +113,7 @@ metadata:
   name: pub-store
   labels:
     app: pub-store
-  namespace: vick-system
+  namespace: cellery-system
 spec:
   # label keys and values that must match in order to receive traffic for this service
   selector:

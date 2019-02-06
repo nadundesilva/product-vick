@@ -946,7 +946,7 @@
 
     <Vick>
         <STS>
-            <Issuer>https://sts.vick.wso2.com</Issuer>
+            <Issuer>https://sts.cellery.io</Issuer>
         </STS>
     </Vick>
 </Server>

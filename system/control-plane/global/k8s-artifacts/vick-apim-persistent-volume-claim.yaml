@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pub-store-volume-claim
-  namespace: vick-system
+  namespace: cellery-system
 spec:
   accessModes:
     - ReadWriteMany

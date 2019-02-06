@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: vick-system
+  name: cellery-system
   labels:
     creator: vick-init
 ---
@@ -14,13 +14,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: vicksvc-account
-  namespace: vick-system
+  namespace: cellery-system
 #---
 #apiVersion: v1
 #kind: PersistentVolumeClaim
 #metadata:
 #  name: pub-store-volume-claim
-#  namespace: vick-system
+#  namespace: cellery-system
 #spec:
 #  accessModes:
 #    - ReadWriteMany

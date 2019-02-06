@@ -21,8 +21,8 @@ package org.wso2.vick.observability.k8s.api.server.client;
  */
 public class Constants {
     public static final String NAMESPACE = "default";
-    public static final String CELL_NAME_LABEL = "vick.wso2.com/cell";
-    public static final String COMPONENT_NAME_LABEL = "vick.wso2.com/service";
-    public static final String GATEWAY_NAME_LABEL = "vick.wso2.com/gateway";
+    public static final String CELL_NAME_LABEL = "mesh.cellery.io/cell";
+    public static final String COMPONENT_NAME_LABEL = "mesh.cellery.io/service";
+    public static final String GATEWAY_NAME_LABEL = "mesh.cellery.io/gateway";
     public static final String RUNNING_STATUS_FIELD_SELECTOR = "status.phase=Running";
 }

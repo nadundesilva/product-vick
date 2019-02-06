@@ -1,9 +1,9 @@
 @App:name("k8s-telemetry-app")
 @App:description("This collects Kubernetes related metrics and stores them in the relevant data sources")
 
-define trigger K8sScrapeTrigger at every 10 min;
+define trigger K8sScrapeTrigger at every 10 sec;
 
-@Store(type="rdbms", datasource="VICK_OBSERVABILITY_DB")
+@Store(type="rdbms", datasource="CELLERY_OBSERVABILITY_DB")
 @PrimaryKey("cell", "component", "name")
 @purge(enable="false")
 define table K8sPodInfoTable (cell string, component string, name string, creationTimestamp long,

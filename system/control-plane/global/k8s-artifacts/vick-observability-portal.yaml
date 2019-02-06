@@ -16,7 +16,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: vick-observability-portal
-  namespace: vick-system
+  namespace: cellery-system
   labels:
     app: vick-observability-portal
     node: vick-observability-portal
@@ -30,7 +30,7 @@ spec:
         node: vick-observability-portal
     spec:
       containers:
-      - image: wso2vick/observability-portal
+      - image: celleryio/observability-portal
         name: observability-portal
         imagePullPolicy: Always
         env:
@@ -68,7 +68,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: vick-observability-portal
-  namespace: vick-system
+  namespace: cellery-system
   labels:
     node: vick-observability-portal
 spec:
@@ -87,7 +87,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: vick-observability-portal-dashboard-ingress
-  namespace: vick-system
+  namespace: cellery-system
   labels:
       node: vick-observability-portal
   annotations:

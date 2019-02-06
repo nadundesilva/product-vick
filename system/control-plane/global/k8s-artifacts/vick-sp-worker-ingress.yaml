@@ -16,7 +16,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: wso2sp-worker-ingress
-  namespace: vick-system
+  namespace: cellery-system
   labels:
       node: wso2sp-worker
   annotations:

@@ -19,4 +19,4 @@ kind: Namespace
 metadata:
   labels:
     istio-injection: enabled
-  name: vick-system
+  name: cellery-system

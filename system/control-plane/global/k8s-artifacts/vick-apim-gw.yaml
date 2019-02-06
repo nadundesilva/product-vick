@@ -19,7 +19,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gateway
-  namespace: vick-system
+  namespace: cellery-system
 spec:
   selector:
     matchLabels:
@@ -60,7 +60,7 @@ spec:
           runAsUser: 802
         env:
         - name: ZIPKIN_HOST
-          value: "wso2sp-worker.vick-system"
+          value: "wso2sp-worker.cellery-system"
         - name: ZIPKIN_PORT
           value: "9411"
         - name: ZIPKIN_API_CONTEXT
@@ -153,7 +153,7 @@ metadata:
   name: gateway
   labels:
     app: gateway
-  namespace: vick-system
+  namespace: cellery-system
 spec:
   # label keys and values that must match in order to receive traffic for this service
   selector:

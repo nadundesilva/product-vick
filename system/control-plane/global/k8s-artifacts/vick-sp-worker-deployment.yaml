@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       -
-        image: wso2vick/wso2sp-worker
+        image: celleryio/sp-worker
         name: wso2sp-worker
         imagePullPolicy: Always
         resources:
@@ -125,7 +125,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: vick-stream-processor
-  namespace: vick-system
+  namespace: cellery-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -150,4 +150,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: vick-stream-processor
-    namespace: vick-system
+    namespace: cellery-system

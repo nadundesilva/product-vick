@@ -78,16 +78,16 @@ define stream TelemetryStream(sourceUID string, sourceIP string, sourceLabels st
                               quotaCacheHit bool, contextReporterLocal bool);
 
 @sink(type="inMemory", topic="istio-mixer-report", @map(type="passThrough"))
-define stream TelemetryInMemorySink(sourceNamespace string, sourceCell string, sourceVICKService string,
+define stream TelemetryInMemorySink(sourceNamespace string, sourceCell string, sourceComponent string,
                                     sourcePod string, destinationNamespace string, destinationCell string,
-                                    destinationVICKService string, destinationPod string, contextReporterKind string,
+                                    destinationComponent string, destinationPod string, contextReporterKind string,
                                     requestHeadersMap object, requestPath string, requestMethod string,
                                     requestSizeBytes long, responseCode long, responseDurationNanoSec int,
                                     responseSizeBytes long);
 
 define function extractFromUID[javascript] return string {
     var uid = data[0];
-    var index = data[1];    // 1: pod, 2: cell, 3: vickService, 4: namespace
+    var index = data[1];    // 1: pod, 2: cell, 3: component, 4: namespace
 
     var matches = /^(([a-z0-9-]+)--([a-z0-9-]+)-deployment-[a-z0-9]+-[a-z0-9]+)\.([a-z0-9-]+)$/.exec(uid);
 
@@ -124,11 +124,11 @@ from PreprocessedTelemetryStream
 select
     extractFromUID(sourceUID, 4) as sourceNamespace,
     extractFromUID(sourceUID, 2) as sourceCell,
-    extractFromUID(sourceUID, 3) as sourceVICKService,
+    extractFromUID(sourceUID, 3) as sourceComponent,
     extractFromUID(sourceUID, 1) as sourcePod,
     extractFromUID(destinationUID, 4) as destinationNamespace,
     extractFromUID(destinationUID, 2) as destinationCell,
-    extractFromUID(destinationUID, 3) as destinationVICKService,
+    extractFromUID(destinationUID, 3) as destinationComponent,
     extractFromUID(destinationUID, 1) as destinationPod,
     contextReporterKind,
     requestHeadersMap,

@@ -31,6 +31,6 @@ const (
 	CellServicesAnnotationKey = GroupName + "/cell-services"
 
 	// VICK System
-	SystemNamespace = "vick-system"
+	SystemNamespace = "cellery-system"
 	SystemConfigMapName = "vick-config"
 )
